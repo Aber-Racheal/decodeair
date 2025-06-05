@@ -1,9 +1,16 @@
-// src/components/ResultCard.tsx
+'use client'
+
+import { useState, useEffect } from 'react'
 import CountryCard from './resultCards/CountryCard'
 import AirlineCard from './resultCards/AirlineCard'
 import AirportCard from './resultCards/AirportCard'
 import CityCard from './resultCards/CityCard'
 import AlphabetCard from './resultCards/AlphabetCard'
+import {
+  addFavorite,
+  removeFavorite,
+  isFavorite,
+} from '@/utils/favorites'
 
 type ResultProps = {
   data: any
@@ -23,8 +30,26 @@ function MapLink({ placeName }: { placeName: string }) {
   )
 }
 
-
 export default function ResultCard({ data }: ResultProps) {
+  const [fav, setFav] = useState(false)
+
+  useEffect(() => {
+    if (data?.code) {
+      setFav(isFavorite(data.code))
+    }
+  }, [data])
+
+  const toggleFavorite = () => {
+    if (!data?.code) return
+    if (fav) {
+      removeFavorite(data.code)
+      setFav(false)
+    } else {
+      addFavorite(data)
+      setFav(true)
+    }
+  }
+
   if (data.notFound) {
     return (
       <div className="p-4 bg-red-100 text-red-800 rounded">
@@ -33,7 +58,7 @@ export default function ResultCard({ data }: ResultProps) {
     )
   }
 
- const renderDetail = () => {
+  const renderDetail = () => {
     switch (data.extra) {
       case 'Country':
         return <CountryCard data={data} />
@@ -50,21 +75,26 @@ export default function ResultCard({ data }: ResultProps) {
     }
   }
 
-  // Pick a place name to use in the map link
-  // (fallback to data.name if no better option)
   const placeName =
-    data.name ||
-    data.city ||
-    data.airportName || // example, depends on your data shape
-    data.officialName ||
-    ''
+    data.name || data.city || data.airportName || data.officialName || ''
 
   return (
     <div className="p-4 border rounded-md shadow bg-white dark:bg-gray-800">
-      <h2 className="text-xl font-semibold mb-2">
-        {data.flag ? `${data.flag} ` : ''}{data.name}
-      </h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">
+          {data.flag ? `${data.flag} ` : ''}{data.name}
+        </h2>
+        <button
+          onClick={toggleFavorite}
+          aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
+          className={`text-xl ${fav ? 'text-yellow-400' : 'text-gray-400'} hover:text-yellow-500`}
+        >
+          {fav ? '★' : '☆'}
+        </button>
+      </div>
+
       <p className="text-sm text-gray-500 mb-2">{data.extra}</p>
+
       {renderDetail()}
 
       {placeName && <MapLink placeName={placeName} />}
