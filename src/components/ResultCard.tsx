@@ -79,25 +79,27 @@ export default function ResultCard({ data }: ResultProps) {
     data.name || data.city || data.airportName || data.officialName || ''
 
   return (
-    <div className="p-4 border rounded-md shadow bg-white dark:bg-gray-800">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">
-          {data.flag ? `${data.flag} ` : ''}{data.name}
-        </h2>
-        <button
-          onClick={toggleFavorite}
-          aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
-          className={`text-xl ${fav ? 'text-yellow-400' : 'text-gray-400'} hover:text-yellow-500`}
-        >
-          {fav ? '★' : '☆'}
-        </button>
-      </div>
-
-      <p className="text-sm text-gray-500 mb-2">{data.extra}</p>
-
-      {renderDetail()}
-
-      {placeName && <MapLink placeName={placeName} />}
+   <div>
+  <div className="flex justify-between items-start mb-2">
+    <div>
+      <h2>{data.flag ? `${data.flag} ` : ''}{data.name}</h2>
+      <p>{data.extra}</p>
     </div>
+    <button onClick={toggleFavorite} aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}>
+      {fav ? '★' : '☆'}
+    </button>
+  </div>
+
+  <div>
+    {renderDetail()}
+  </div>
+
+  {placeName && (
+    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(placeName)}`} target="_blank" rel="noopener noreferrer">
+      📍 View "{placeName}" on Google Maps
+    </a>
+  )}
+</div>
+
   )
 }

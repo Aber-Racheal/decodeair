@@ -1,18 +1,23 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { useState } from 'react'
-import ThemeToggle from './ThemeToggle'
+import Link from "next/link";
+import { useState } from "react";
+import ThemeToggle from "./ThemeToggle";
+import Modal from "./Modal";
+//import RandomCodes from "./RandomCodes"; // Make sure this exists or replace with your actual component
 
-export default function Header() {
-  const [menuOpen, setMenuOpen] = useState(false)
+export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <header className="bg-white dark:bg-gray-800 border-b px-6 py-4">
       <div className="max-w-4xl mx-auto flex items-center justify-between">
         {/* Site title */}
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          <Link href="/" onClick={() => setMenuOpen(false)}>DecodeAir</Link>
+          <Link href="/" onClick={() => setMenuOpen(false)}>
+            DecodeAir
+          </Link>
         </h1>
 
         {/* Desktop nav */}
@@ -38,12 +43,17 @@ export default function Header() {
           >
             ⭐ Favorites
           </Link>
+          <button
+            onClick={() => setShowModal(true)}
+            className="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-yellow-400"
+          >
+            Daily Random Codes
+          </button>
         </nav>
 
         {/* Theme toggle and hamburger */}
         <div className="flex items-center space-x-4">
           <ThemeToggle />
-
           <button
             className="md:hidden text-gray-700 dark:text-gray-300 focus:outline-none"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -51,15 +61,29 @@ export default function Header() {
           >
             {menuOpen ? (
               // X icon
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2"
-                   strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                viewBox="0 0 24 24"
+              >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             ) : (
               // Hamburger icon
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2"
-                   strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                viewBox="0 0 24 24"
+              >
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <line x1="3" y1="12" x2="21" y2="12" />
                 <line x1="3" y1="18" x2="21" y2="18" />
@@ -96,5 +120,5 @@ export default function Header() {
         </nav>
       )}
     </header>
-  )
+  );
 }
