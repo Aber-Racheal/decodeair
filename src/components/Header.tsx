@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import ThemeToggle from "./ThemeToggle";
-import Modal from "./Modal";
+//import Modal from "./Modal";
 //import RandomCodes from "./RandomCodes"; // Make sure this exists or replace with your actual component
 
 export default function Navbar() {
@@ -43,12 +43,12 @@ export default function Navbar() {
           >
             ⭐ Favorites
           </Link>
-          <button
+          {/* <button
             onClick={() => setShowModal(true)}
             className="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-yellow-400"
           >
             Daily Random Codes
-          </button>
+          </button> */}
         </nav>
 
         {/* Theme toggle and hamburger */}
