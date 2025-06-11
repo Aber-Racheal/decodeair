@@ -1,10 +1,7 @@
 // src/components/glossary/GlossaryItem.tsx
-type Props = {
-  item: any
-  type: string
-}
+import { GlossaryItemType } from '@/types/glossary'
 
-export default function GlossaryItem({ item, type }: Props) {
+export default function GlossaryItem({ item, type }: GlossaryItemType) {
   const renderSummary = () => {
     switch (type) {
       case 'country':

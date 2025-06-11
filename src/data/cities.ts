@@ -1,5 +1,5 @@
 // src/data/cities.ts
-
+import { countries } from './countries'
 export const cities = [
   {
     name: 'Nairobi',
@@ -266,4 +266,7 @@ export const cities = [
     countryCode: 'MU',
     airportCode: 'MRU',
   }
-]
+].map(city => ({
+  ...city,
+  country: countries.find(c => c.code === city.countryCode)?.name || 'Unknown'
+}));

@@ -4,11 +4,18 @@ import { useState, useMemo } from 'react'
 import GlossaryItem from './GlossaryItem'
 import GlossaryFilter from './GlossaryFilter'
 
-type Props = {
-  title: string
-  data: any[]
-  type: string
-}
+type CountryItem = { name: string; code: string }
+type AirlineItem = { name: string; iata?: string }
+type AirportItem = { name: string; code: string }
+type CityItem = { name: string; country: string }
+type AlphabetItem = { letter: string; word: string }
+
+type Props =
+  | { title: string; data: CountryItem[]; type: 'country' }
+  | { title: string; data: AirlineItem[]; type: 'airline' }
+  | { title: string; data: AirportItem[]; type: 'airport' }
+  | { title: string; data: CityItem[]; type: 'city' }
+  | { title: string; data: AlphabetItem[]; type: 'alphabet' }
 
 const ITEMS_PER_PAGE = 10
 
@@ -23,9 +30,10 @@ export default function GlossarySection({ title, data, type }: Props) {
     return data.filter(item => {
       const combined = Object.values(item).join(' ').toLowerCase()
       const matchesQuery = combined.includes(query.toLowerCase())
-      const matchesLetter = activeLetter
-        ? item.name?.toUpperCase()?.startsWith(activeLetter)
-        : true
+
+      const name = (item as any).name ?? (item as any).letter
+      const matchesLetter = activeLetter ? name?.toUpperCase()?.startsWith(activeLetter) : true
+
       return matchesQuery && matchesLetter
     })
   }, [query, activeLetter, data])
@@ -68,9 +76,15 @@ export default function GlossarySection({ title, data, type }: Props) {
       {/* Glossary Items */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 transition-all duration-300">
         {paginated.length > 0 ? (
-          paginated.map((item, idx) => (
-            <GlossaryItem key={idx} item={item} type={type} />
-          ))
+          paginated.map((item, idx) => {
+            return (
+              <GlossaryItem
+                key={idx}
+                item={item as any} // safely cast here based on known type
+                type={type}
+              />
+            )
+          })
         ) : (
           <p className="text-center text-gray-600 dark:text-gray-400 mt-6">
             No results found{query ? ` for "${query}"` : ''}. Try a different search or pick another letter.

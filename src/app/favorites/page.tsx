@@ -2,25 +2,25 @@
 
 import { useEffect, useState } from 'react'
 import ResultCard from '@/components/ResultCard'
-import { getFavorites, removeFavorite } from '@/utils/favorites'
+import { getFavorites } from '@/utils/favorites'
+
+interface FavoriteItem {
+  code?: string
+  name?: string
+  extra?: string
+  [key: string]: any
+}
 
 export default function FavoritesPage() {
-  const [favorites, setFavorites] = useState<any[]>([])
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([])
 
-  // Load favorites on mount
-  useEffect(() => {
-    try {
-      setFavorites(getFavorites())
-    } catch (error) {
-      console.error('Could not load favorites from localStorage', error)
-    }
-  }, [])
-
-  // Handle removal and refresh state
-  const handleRemove = (code: string) => {
-    removeFavorite(code)
-    setFavorites(getFavorites())
+useEffect(() => {
+  try {
+    setFavorites(getFavorites() as FavoriteItem[])
+  } catch (error) {
+    console.error('Could not load favorites from localStorage', error)
   }
+}, [])
 
   const handleClearAll = () => {
     localStorage.removeItem('decodeair_favorites')
@@ -41,18 +41,17 @@ export default function FavoritesPage() {
           </button>
 
           <div className="space-y-4">
-           {favorites.map((item, idx) => (
-  <ResultCard
-    key={`${item.code || item.name || idx}-${item.extra || 'Unknown'}`}
-    data={item}
-  />
-))}
-
+            {favorites.map((item, idx) => (
+              <ResultCard
+                key={`${item.code || item.name || idx}-${item.extra || 'Unknown'}`}
+                data={item}
+              />
+            ))}
           </div>
         </>
       ) : (
         <p className="text-gray-600 dark:text-gray-400">
-          You haven't added anything yet. Search and star results to save them here.
+          You haven&rsquo;t added anything yet. Search and star results to save them here.
         </p>
       )}
     </div>
